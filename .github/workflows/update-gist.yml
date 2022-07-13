@@ -25,5 +25,5 @@ jobs:
           cp cancelot.sh /tmp/gist
           cd /tmp/gist
           git add cancelot.sh
-          git -c user.name="${GITHUB_ACTOR}" -c user.email="${GITHUB_ACTOR}@users.noreply.github.com" commit -m ""
+          git -c user.name="${GITHUB_ACTOR}" -c user.email="${GITHUB_ACTOR}@users.noreply.github.com" commit -m "update gist"
           git push
