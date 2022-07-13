@@ -15,7 +15,8 @@
 #    steps:
 #    - name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine'
 #      entrypoint: bash
-#      args: ['./cancelot.sh', '--same_trigger_only']
+#      args:
+#        - cancelot.sh --same_trigger_only
 #      env:
 #        - 'CURRENT_BUILD_ID=$BUILD_ID'
 #        - 'PROJECT_ID=$PROJECT_ID'
