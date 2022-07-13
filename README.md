@@ -15,7 +15,7 @@ Use `--same_trigger_only` to narrow down to builds triggered by the same trigger
 
 ℹ️ Tip: Use suitable regional registry to reduce cross-region traffic costs.
 
-For example, `eu.gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine`
+For example, `eu.gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine` for `europe-*` regions.
 
 ```yaml
 steps:
@@ -47,7 +47,13 @@ Script could be used locally or with any CI environment with gcloud installed an
 ./cancelot.sh --current_build_id $BUILD_ID --branch_name $BRANCH_NAME [--same_trigger_only] [--project "gcloud-project-id"] [--region "europe-west2"]
 ```
 
-Locally with docker and passing auth config via volume mapping: 
+You can download the latest version from gist, btw, without cloning the repo (if you trust running random bash scripts from the internets!):
+
+```bash
+curl -L https://gist.github.com/siberex/bb0540b208019382d08732cc6dd59007/raw -o cancelot.sh && chmod +x cancelot.sh
+```
+
+Run locally with docker and pass gcloud auth config from the host via volume mapping:
 
 ```bash
 docker run -it --rm -e CLOUDSDK_CONFIG=/config/gcloud \
