@@ -1,5 +1,8 @@
 name: Update Gist
 
+# Required secrets: GIST_TOKEN
+# https://github.com/settings/tokens/new
+
 env:
   GIST_SHA: bb0540b208019382d08732cc6dd59007
 
@@ -18,9 +21,9 @@ jobs:
 
       - name: Push gist
         run: |
-          git clone "ssh://git@gist.github.com/$GIST_SHA.git" /tmp/gist
+          git clone --depth=1 https://${{ secrets.GIST_TOKEN }}@gist.github.com/${GIST_SHA}.git /tmp/gist
           cp cancelot.sh /tmp/gist
           cd /tmp/gist
           git add cancelot.sh
-          git commit -m ""
+          git -c user.name="${GITHUB_ACTOR}" -c user.email="${GITHUB_ACTOR}@users.noreply.github.com" commit -m ""
           git push
