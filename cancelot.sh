@@ -100,15 +100,20 @@ GOOGLE_CLOUD_PROJECT=${PROJECT_ID:-$(gcloud config list --format 'get(core.proje
 # But Cloud Builds for AppEngine are multi-regional, so the correct value for region will be empty "" or "(unset)"
 GOOGLE_CLOUD_REGION=${REGION:-"(unset)"}
 
-QUERY_BUILD=$(gcloud builds describe "$CURRENT_BUILD_ID" --project="$GOOGLE_CLOUD_PROJECT" --region="$GOOGLE_CLOUD_REGION" --format="value(buildTriggerId, createTime, substitutions.BRANCH_NAME)")
-read -r BUILD_TRIGGER_ID BUILD_CREATE_TIME BUILD_BRANCH <<<"$QUERY_BUILD"
+echo "Getting Cloud Builds for ProjectId=$GOOGLE_CLOUD_PROJECT with region filter: $GOOGLE_CLOUD_REGION"
+
+# Note BUILD_BRANCH and BUILD_TRIGGER_ID could be empty
+QUERY_BUILD=$(gcloud builds describe "$CURRENT_BUILD_ID" --project="$GOOGLE_CLOUD_PROJECT" --region="$GOOGLE_CLOUD_REGION" --format="csv[no-heading](createTime, buildTriggerId, substitutions.BRANCH_NAME)")
+IFS="," read -r BUILD_CREATE_TIME BUILD_TRIGGER_ID BUILD_BRANCH <<<"$QUERY_BUILD"
 
 FILTERS="id!=$CURRENT_BUILD_ID AND createTime<$BUILD_CREATE_TIME"
 
-if [[ "$TARGET_BRANCH" == "" ]]; then
+if [[ -z $TARGET_BRANCH ]]; then
     TARGET_BRANCH="$BUILD_BRANCH"
 fi
+if [[ -n $TARGET_BRANCH ]]; then
 FILTERS="$FILTERS AND substitutions.BRANCH_NAME=$TARGET_BRANCH"
+fi
 
 if [[ $SAME_TRIGGER_ONLY -eq 1 ]]; then
     # Get Trigger Id from current build
