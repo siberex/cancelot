@@ -1,0 +1,26 @@
+name: Update Gist
+
+env:
+  GIST_SHA: bb0540b208019382d08732cc6dd59007
+
+on:
+  push:
+    paths:
+      - 'cancelot.sh'
+
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    name: Update Gist
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Push gist
+        run: |
+          git clone "ssh://git@gist.github.com/$GIST_SHA.git" /tmp/gist
+          cp cancelot.sh /tmp/gist
+          cd /tmp/gist
+          git add cancelot.sh
+          git commit -m ""
+          git push
