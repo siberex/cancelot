@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# https://gist.github.com/siberex/bb0540b208019382d08732cc6dd59007
+# https://github.com/siberex/cancelot
 
 # Provides automation for cancelling Cloud Builds
 # Use as a first step to cancel previous builds currently in progress or queued for the same branch name and trigger id.
