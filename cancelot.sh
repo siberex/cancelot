@@ -14,7 +14,7 @@
 # Usage within Cloud Build step:
 #    steps:
 #    - name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine'
-#      entrypoint: 'bash'
+#      entrypoint: bash
 #      args: ['./cancelot.sh', '--same_trigger_only']
 #      env:
 #        - 'CURRENT_BUILD_ID=$BUILD_ID'
