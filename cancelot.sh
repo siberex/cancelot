@@ -73,10 +73,10 @@ if [[ "$CURRENT_BUILD_ID" == "" ]]; then
     usage
 fi
 
-QUERY_BUILD=$(gcloud builds describe "$CURRENT_BUILD_ID" --format="value(buildTriggerId, startTime, substitutions.BRANCH_NAME)")
-read -r BUILD_TRIGGER_ID BUILD_START_TIME BUILD_BRANCH <<<"$QUERY_BUILD"
+QUERY_BUILD=$(gcloud builds describe "$CURRENT_BUILD_ID" --format="value(buildTriggerId, createTime, substitutions.BRANCH_NAME)")
+read -r BUILD_TRIGGER_ID BUILD_CREATE_TIME BUILD_BRANCH <<<"$QUERY_BUILD"
 
-FILTERS="id!=$CURRENT_BUILD_ID AND startTime<$BUILD_START_TIME"
+FILTERS="id!=$CURRENT_BUILD_ID AND createTime<$BUILD_CREATE_TIME"
 
 if [[ "$TARGET_BRANCH" == "" ]]; then
     TARGET_BRANCH="$BUILD_BRANCH"
@@ -89,7 +89,7 @@ if [[ $SAME_TRIGGER_ONLY -eq 1 ]]; then
     echo "Filtering Trigger Id: $BUILD_TRIGGER_ID"
 fi
 
-echo "Filtering ongoing builds for branch '$TARGET_BRANCH' started before: $BUILD_START_TIME"
+echo "Filtering ongoing builds for branch '$TARGET_BRANCH' created before: $BUILD_CREATE_TIME"
 # echo "$FILTERS"
 
 # Get ongoing build ids to cancel (+status)
@@ -107,5 +107,5 @@ echo "BUILD ID                                CURRENT STATUS"
 for build in "${CANCEL_BUILDS[@]}"; do
     echo "$build"
     ID=$(echo "$build" | awk '{print $1;}')
-    gcloud builds cancel "$ID" || true
+    gcloud builds cancel "$ID" > /dev/null || true
 done
