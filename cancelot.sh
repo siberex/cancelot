@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # https://github.com/siberex/cancelot
-
+#
+# To download the latest version (if you trust running random bash scripts from the internets!):
+# curl -L https://gist.github.com/siberex/bb0540b208019382d08732cc6dd59007/raw -o cancelot.sh && chmod +x cancelot.sh
+#
 # Provides automation for cancelling Cloud Builds
 # Use as a first step to cancel previous builds currently in progress or queued for the same branch name and trigger id.
 # Similar to: https://github.com/GoogleCloudPlatform/cloud-builders-community/tree/master/cancelot

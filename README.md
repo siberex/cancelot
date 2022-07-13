@@ -22,6 +22,8 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine'
   entrypoint: bash
   args:
+    # To download the latest version (if you trust running random bash scripts from the internets!):
+    #- curl -L https://gist.github.com/siberex/bb0540b208019382d08732cc6dd59007/raw -o cancelot.sh && chmod +x cancelot.sh
     - cancelot.sh --current_build_id "${BUILD_ID}" --same_trigger_only
   env:
     - 'PROJECT_ID=$PROJECT_ID'
