@@ -43,11 +43,13 @@ echoerr() { echo "$@" 1>&2; }
 usage() {
     cat <<USAGE >&2
 Usage:
-    $CMDNAME --current_build_id \$BUILD_ID [--branch_name \$BRANCH_NAME] [--same_trigger_only]
+    $CMDNAME --current_build_id \$BUILD_ID [--branch_name \$BRANCH_NAME] [--same_trigger_only] [--project "gcloud-project-id"] [--region "europe-west2"]
     --current_build_id \$BUILD_ID  Current Build Id
     --branch_name \$BRANCH_NAME    Trigger branch (aka head branch)
                                     (optional, defaults to current build substitutions.BRANCH_NAME)
-    --same_trigger_only           Only cancel builds with the same Trigger Id as current build’s trigger id
+    --project                      GCloud Project Id
+    --region                       GCloud Region, empty value
+    --same_trigger_only            Only cancel builds with the same Trigger Id as current build’s trigger id
                                     (optional, defaults to false = cancel all matching branch)
 USAGE
     exit 1
@@ -116,7 +118,7 @@ if [[ -z $TARGET_BRANCH ]]; then
     TARGET_BRANCH="$BUILD_BRANCH"
 fi
 if [[ -n $TARGET_BRANCH ]]; then
-FILTERS="$FILTERS AND substitutions.BRANCH_NAME=$TARGET_BRANCH"
+    FILTERS="$FILTERS AND substitutions.BRANCH_NAME=$TARGET_BRANCH"
 fi
 
 if [[ $SAME_TRIGGER_ONLY -eq 1 ]]; then
@@ -143,5 +145,5 @@ echo "BUILD ID                                CURRENT STATUS"
 for build in "${CANCEL_BUILDS[@]}"; do
     echo "$build"
     ID=$(echo "$build" | awk '{print $1;}')
-    gcloud builds cancel "$ID" --project="$GOOGLE_CLOUD_PROJECT" --region="$GOOGLE_CLOUD_REGION" > /dev/null || true
+    gcloud builds cancel "$ID" --project="$GOOGLE_CLOUD_PROJECT" --region="$GOOGLE_CLOUD_REGION" >/dev/null || true
 done
